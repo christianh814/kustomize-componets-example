@@ -2,6 +2,14 @@
 
 This guide uses a small NGINX `catalog` app. The base owns its Deployment and Service; overlays set environment-specific replicas. Later lessons add two optional Components: pod security settings and a NetworkPolicy.
 
+```mermaid
+flowchart LR
+  Base["Base<br/>Deployment + Service"] --> Dev["dev overlay<br/>replicas: 1"]
+  Base --> Prod["prod overlay<br/>replicas: 3 + selected Components"]
+  Dev --> DevOut["Rendered dev manifests"]
+  Prod --> ProdOut["Rendered prod manifests"]
+```
+
 ## What you need
 
 - Git
@@ -26,4 +34,7 @@ Try the production overlay too:
 kubectl kustomize doc/examples/apps/catalog/overlays/prod
 ```
 
-The only difference is replicas. This is the normal Kustomize base/overlay workflow Argo CD follows when the Application path points at an overlay. An overlay is a complete build target: it gathers the base and all chosen customizations into one deployable variant.
+The production overlay sets three replicas and also selects Components, which the next lesson explains. For now, focus on how both overlays reuse the same base and set an environment-specific replica count. An overlay is a complete build target: it gathers the base and all chosen customizations into one deployable variant.
+---
+
+[Next: Walk →](../walk/README.md)

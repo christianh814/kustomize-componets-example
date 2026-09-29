@@ -2,6 +2,15 @@
 
 You can also keep an overlay generic and select Components in the Argo CD `Application`. This is useful when component selection belongs with the app registration or platform configuration. It requires Argo CD v2.10.0 or later, and the component paths are relative to `spec.source.path`.
 
+```mermaid
+flowchart LR
+  Git["Git repo<br/>generic overlay"] --> Repo["Argo CD repo-server"]
+  App["Application<br/>selects Components"] --> Repo
+  Repo --> Render["Kustomize render"]
+  Render --> Sync["Argo CD sync"]
+  Sync --> Cluster["catalog namespace<br/>Deployment + Service + NetworkPolicy"]
+```
+
 The example Application points at `doc/examples/apps/catalog/overlays/argocd` and opts into both Components in [`catalog-prod.yaml`](../examples/argocd/catalog-prod.yaml). The manifest is configured for this repository; adjust `repoURL` if you forked it. Apply it to a cluster where Argo CD is installed:
 
 ```sh
@@ -25,3 +34,6 @@ Success looks like `Synced` and `Healthy` for the Application, a `catalog` Deplo
 - [Kustomize Components example](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/components.md)
 - [Argo CD: Kustomize](https://argo-cd.readthedocs.io/en/stable/user-guide/kustomize/)
 - [Kubernetes: Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/)
+---
+
+[← Walk](../walk/README.md)

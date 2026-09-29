@@ -11,6 +11,14 @@ A Component is more than a folder of YAML. It participates in the same Kustomize
 
 That means `pod-security` can patch the base Deployment without copying that Deployment into the Component. `network-policy` contributes a new resource. Both are opt-in, so `dev` remains unchanged and `prod` opts in to both. A regular overlay is usually the right place for environment identity and replica counts; a Component is a good fit for a reusable, optional capability.
 
+```mermaid
+flowchart LR
+  Overlay["prod overlay<br/>base + replicas: 3"] --> Build["One Kustomize build"]
+  Security["pod-security Component<br/>patches the Deployment"] --> Build
+  Policy["network-policy Component<br/>adds a NetworkPolicy"] --> Build
+  Build --> Output["Complete rendered manifests"]
+```
+
 ## Overlay or Component?
 
 Both can use Kustomize patches and resources, but they play different roles:
@@ -54,3 +62,6 @@ Choose an **overlay** when a difference creates a deployable target of its own: 
 Choose a **Component** when the difference is an optional, reusable feature that can be switched on for one or more overlays: a security hardening patch, an ingress plus its supporting resources, or telemetry configuration. Components help avoid making a separate overlay for every combination of features.
 
 If every deployment always needs a setting, put it in the base. If a value is specific to one environment, keep it in that overlay. If a reusable feature should be enabled selectively, make it a Component.
+---
+
+[← Crawl](../crawl/README.md) · [Continue to Run →](../run/README.md)
