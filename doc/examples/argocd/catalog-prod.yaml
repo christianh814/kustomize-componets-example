@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: catalog-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/OWNER/REPO.git
+    targetRevision: main
+    path: apps/catalog/overlays/argocd
+    kustomize:
+      components:
+        - ../../../../components/pod-security
+        - ../../../../components/network-policy
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: catalog
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
