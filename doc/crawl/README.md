@@ -18,7 +18,7 @@ Start with the base and a plain development overlay. This overlay has no Compone
 kubectl kustomize doc/examples/apps/catalog/overlays/dev
 ```
 
-Read the output: it contains a Deployment with one replica and a Service. `doc/examples/apps/catalog/base` owns shared resources; `overlays/dev` composes the base and sets an environment-specific replica count. `kubectl kustomize` renders only; Argo CD performs this render from the path in an Application's `spec.source.path`.
+Read the output: it contains a Deployment with one replica and a Service. `doc/examples/apps/catalog/base` owns shared resources; `overlays/dev` composes the base and sets an environment-specific replica count. `kubectl kustomize` renders only; Argo CD performs this same render from the directory named by the Application's `spec.source.path`.
 
 Try the production overlay too:
 
@@ -26,5 +26,4 @@ Try the production overlay too:
 kubectl kustomize doc/examples/apps/catalog/overlays/prod
 ```
 
-The only difference is replicas. This is the normal Kustomize base/overlay workflow Argo CD follows when the Application path points at an overlay.
-
+The only difference is replicas. This is the normal Kustomize base/overlay workflow Argo CD follows when the Application path points at an overlay. An overlay is a complete build target: it gathers the base and all chosen customizations into one deployable variant.

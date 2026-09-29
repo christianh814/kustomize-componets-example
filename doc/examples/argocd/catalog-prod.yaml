@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/OWNER/REPO.git
+    repoURL: https://github.com/christianh814/kustomize-componets-example.git
     targetRevision: main
-    path: apps/catalog/overlays/argocd
+    path: doc/examples/apps/catalog/overlays/argocd
     kustomize:
       components:
         - ../../../../components/pod-security
