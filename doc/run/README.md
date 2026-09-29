@@ -10,9 +10,13 @@ argocd app get catalog-prod
 argocd app diff catalog-prod
 argocd app sync catalog-prod
 argocd app wait catalog-prod --sync --health
+kubectl get application catalog-prod -n argocd
+kubectl get deployment,service,networkpolicy -n catalog
 ```
 
 The Application's destination namespace is `catalog`; `CreateNamespace=true` lets Argo CD create it. The target revision is `main`. Sync is manual in this example so you can review the diff before applying it.
+
+Success looks like `Synced` and `Healthy` for the Application, a `catalog` Deployment with all three replicas ready, and the `catalog-ingress` NetworkPolicy. The Service is named `catalog` and serves port 80.
 
 `kubectl kustomize doc/examples/apps/catalog/overlays/argocd` renders the generic overlay alone; it cannot see the Application's `spec.source.kustomize.components`. For the exact Argo CD result, inspect the Application's rendered manifests or run `argocd app diff`. If you want local builds and Argo CD to share one obvious source of component selection, declare `components` in the overlay as the production overlay does.
 
