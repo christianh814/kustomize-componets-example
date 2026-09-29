@@ -2,6 +2,19 @@
 
 You can also keep an overlay generic and select Components in the Argo CD `Application`. This is useful when component selection belongs with the app registration or platform configuration. It requires Argo CD v2.10.0 or later, and the component paths are relative to `spec.source.path`.
 
+This is the relevant part of the example Application:
+
+```yaml
+source:
+  path: doc/examples/apps/catalog/overlays/argocd
+  kustomize:
+    components:
+      - ../../../../components/pod-security
+      - ../../../../components/network-policy
+```
+
+Argo CD adds these component paths while rendering the selected source path. The paths are relative to `source.path`, so they resolve to the shared Component directories under `doc/examples/components/`. The generic overlay stays reusable; the Application chooses this deployment's optional capabilities.
+
 ```mermaid
 flowchart LR
   Git["Git repo<br/>generic overlay"] --> Repo["Argo CD repo-server"]

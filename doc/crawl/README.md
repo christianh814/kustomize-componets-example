@@ -28,6 +28,30 @@ kubectl kustomize doc/examples/apps/catalog/overlays/dev
 
 Read the output: it contains a Deployment with one replica and a Service. `doc/examples/apps/catalog/base` owns shared resources; `overlays/dev` composes the base and sets an environment-specific replica count. `kubectl kustomize` renders only; Argo CD performs this same render from the directory named by the Application's `spec.source.path`.
 
+The base `kustomization.yaml` collects the Deployment and Service:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+```
+
+The development overlay points to that base, then changes only the replica count:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+replicas:
+  - name: catalog
+    count: 1
+```
+
+Paths such as `../../base` are relative to the directory containing this overlay's `kustomization.yaml`.
+
 Try the production overlay too:
 
 ```sh

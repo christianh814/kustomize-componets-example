@@ -11,6 +11,42 @@ A Component is more than a folder of YAML. It participates in the same Kustomize
 
 That means `pod-security` can patch the base Deployment without copying that Deployment into the Component. `network-policy` contributes a new resource. Both are opt-in, so `dev` remains unchanged and `prod` opts in to both. A regular overlay is usually the right place for environment identity and replica counts; a Component is a good fit for a reusable, optional capability.
 
+The Components declare what they contribute. The first patches a resource already in the build; the second adds a resource of its own:
+
+```yaml
+# components/pod-security/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - path: deployment-patch.yaml
+```
+
+```yaml
+# components/network-policy/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - network-policy.yaml
+```
+
+The production overlay composes the base, sets three replicas, and opts into both capabilities:
+
+```yaml
+# apps/catalog/overlays/prod/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+replicas:
+  - name: catalog
+    count: 3
+components:
+  - ../../../../components/pod-security
+  - ../../../../components/network-policy
+```
+
+Each component path is resolved from the production overlay directory. The referenced directories contain their own `kustomization.yaml` files. The production overlay is the complete build target; the Components are optional inputs to that build.
+
 ```mermaid
 flowchart LR
   Overlay["prod overlay<br/>base + replicas: 3"] --> Build["One Kustomize build"]
