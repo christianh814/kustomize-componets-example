@@ -35,6 +35,7 @@ kubectl kustomize doc/examples/apps/catalog/overlays/prod
 ```
 
 The production overlay sets three replicas and also selects Components, which the next lesson explains. For now, focus on how both overlays reuse the same base and set an environment-specific replica count. An overlay is a complete build target: it gathers the base and all chosen customizations into one deployable variant.
+
 ---
 
 [Next: Walk →](../walk/README.md)

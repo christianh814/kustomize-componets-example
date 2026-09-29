@@ -34,6 +34,7 @@ Success looks like `Synced` and `Healthy` for the Application, a `catalog` Deplo
 - [Kustomize Components example](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/components.md)
 - [Argo CD: Kustomize](https://argo-cd.readthedocs.io/en/stable/user-guide/kustomize/)
 - [Kubernetes: Kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/)
+
 ---
 
 [← Walk](../walk/README.md)
